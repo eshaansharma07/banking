@@ -14,7 +14,343 @@
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      :root {
+        --bg: #f4efe6;
+        --bg-deep: #0d1b2a;
+        --surface: rgba(255, 255, 255, 0.78);
+        --surface-solid: #fffdf8;
+        --surface-dark: #14263a;
+        --text: #102033;
+        --muted: #66778b;
+        --primary: #0c8b6c;
+        --primary-dark: #0a6d55;
+        --accent: #f59f00;
+        --border: rgba(16, 32, 51, 0.08);
+        --shadow: 0 24px 60px rgba(13, 27, 42, 0.12);
+        --radius-xl: 28px;
+        --radius-lg: 20px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Manrope", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top left, rgba(245, 159, 0, 0.2), transparent 28%),
+          radial-gradient(circle at top right, rgba(12, 139, 108, 0.18), transparent 25%),
+          linear-gradient(180deg, #f9f6ef 0%, var(--bg) 45%, #ebe1d2 100%);
+      }
+
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+
+      .page-shell {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 24px 0 48px;
+      }
+
+      .topbar,
+      .hero-grid,
+      .dashboard-grid,
+      .transfer-layout,
+      .section-head {
+        display: grid;
+        gap: 20px;
+      }
+
+      .topbar {
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 1.1rem;
+        font-weight: 700;
+      }
+
+      .brand-mark {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent), var(--primary));
+        box-shadow: 0 0 0 8px rgba(12, 139, 108, 0.12);
+      }
+
+      .hero-grid,
+      .dashboard-grid,
+      .transfer-layout {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .card {
+        background: var(--surface-solid);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow);
+      }
+
+      .glass {
+        background: var(--surface);
+        backdrop-filter: blur(18px);
+      }
+
+      .hero-copy,
+      .hero-panel,
+      .summary-card,
+      .balance-card,
+      .transfer-card,
+      .api-card {
+        padding: 28px;
+      }
+
+      .hero-copy h1,
+      .section-head h2,
+      .hero-panel h2,
+      .transfer-card h3,
+      .api-card h3 {
+        margin: 0;
+        line-height: 1.05;
+      }
+
+      .hero-copy h1 {
+        max-width: 12ch;
+        font-family: "Space Grotesk", sans-serif;
+        font-size: clamp(2.8rem, 7vw, 5.3rem);
+      }
+
+      .hero-text,
+      .summary-card p,
+      .balance-card p,
+      .api-card li,
+      #userEmail {
+        color: var(--muted);
+      }
+
+      .eyebrow {
+        margin: 0 0 10px;
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--primary);
+      }
+
+      .hero-metrics {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 28px;
+      }
+
+      .hero-metrics div,
+      .token-panel {
+        padding: 16px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(16, 32, 51, 0.06);
+      }
+
+      .hero-metrics strong,
+      .token-panel strong {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 1.05rem;
+      }
+
+      .panel-header,
+      .section-head {
+        grid-template-columns: 1fr auto;
+        align-items: center;
+      }
+
+      .tabs {
+        display: inline-flex;
+        gap: 10px;
+        padding: 8px;
+        margin: 24px 0 18px;
+        background: #eef3f8;
+        border-radius: 999px;
+      }
+
+      .tab-button,
+      .ghost-button,
+      .primary-button {
+        border: 0;
+        border-radius: 999px;
+        cursor: pointer;
+        transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+      }
+
+      .tab-button,
+      .ghost-button {
+        padding: 12px 16px;
+        background: transparent;
+        color: var(--text);
+      }
+
+      .tab-button.active {
+        background: #ffffff;
+        box-shadow: 0 10px 30px rgba(16, 32, 51, 0.1);
+      }
+
+      .primary-button {
+        padding: 14px 18px;
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: white;
+        font-weight: 700;
+        box-shadow: 0 18px 32px rgba(12, 139, 108, 0.25);
+      }
+
+      .ghost-button {
+        background: rgba(16, 32, 51, 0.04);
+      }
+
+      .primary-button:hover,
+      .ghost-button:hover,
+      .tab-button:hover {
+        transform: translateY(-1px);
+      }
+
+      .auth-form,
+      .transfer-form {
+        display: grid;
+        gap: 14px;
+      }
+
+      .auth-form label,
+      .transfer-form label {
+        display: grid;
+        gap: 8px;
+        font-weight: 600;
+      }
+
+      .auth-form input,
+      .transfer-form input,
+      .transfer-form select {
+        width: 100%;
+        padding: 14px 16px;
+        border: 1px solid rgba(16, 32, 51, 0.12);
+        border-radius: 16px;
+        background: #fff;
+      }
+
+      .message-box {
+        min-height: 24px;
+        margin: 18px 0 0;
+        color: var(--primary-dark);
+        font-weight: 700;
+      }
+
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: rgba(245, 159, 0, 0.12);
+        color: #8a5700;
+        font-weight: 700;
+      }
+
+      .dashboard {
+        margin-top: 36px;
+      }
+
+      .section-head {
+        margin-bottom: 20px;
+      }
+
+      .summary-card h3,
+      .balance-card h3 {
+        margin: 0 0 8px;
+        font-size: 1.8rem;
+      }
+
+      .accounts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 18px;
+        margin: 24px 0;
+      }
+
+      .account-card {
+        padding: 24px;
+        border-radius: var(--radius-lg);
+        background: linear-gradient(180deg, #13283d 0%, #0b1723 100%);
+        color: white;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .account-card::after {
+        content: "";
+        position: absolute;
+        inset: auto -20% -35% auto;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: rgba(245, 159, 0, 0.14);
+      }
+
+      .account-card h4,
+      .account-card p {
+        position: relative;
+        z-index: 1;
+      }
+
+      .account-card h4 {
+        margin: 0 0 8px;
+        font-size: 1.3rem;
+      }
+
+      .account-card .amount {
+        margin: 18px 0 0;
+        font-size: 2rem;
+        font-weight: 800;
+      }
+
+      .api-card ul {
+        margin: 18px 0 0;
+        padding-left: 18px;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      @media (max-width: 900px) {
+        .hero-grid,
+        .dashboard-grid,
+        .transfer-layout,
+        .panel-header,
+        .section-head,
+        .topbar {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-copy h1 {
+          max-width: none;
+        }
+
+        .hero-metrics {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
   </head>
   <body>
     <div class="page-shell">
@@ -165,6 +501,240 @@
       </main>
     </div>
 
-    <script src="/app.js"></script>
+    <script>
+      const state = {
+        accessToken: localStorage.getItem("accessToken") || "",
+        user: null,
+        accounts: []
+      };
+
+      const messageBox = document.getElementById("messageBox");
+      const registerForm = document.getElementById("registerForm");
+      const loginForm = document.getElementById("loginForm");
+      const transferForm = document.getElementById("transferForm");
+      const accountsGrid = document.getElementById("accountsGrid");
+      const fromAccount = document.getElementById("fromAccount");
+      const toAccount = document.getElementById("toAccount");
+      const tokenStatus = document.getElementById("tokenStatus");
+      const userName = document.getElementById("userName");
+      const userEmail = document.getElementById("userEmail");
+      const totalBalance = document.getElementById("totalBalance");
+      const logoutButton = document.getElementById("logoutButton");
+      const refreshSessionButton = document.getElementById("refreshSessionButton");
+      const statusBadge = document.getElementById("statusBadge");
+
+      document.querySelectorAll(".tab-button").forEach((button) => {
+        button.addEventListener("click", () => switchTab(button.dataset.tab));
+      });
+
+      registerForm.addEventListener("submit", (event) => handleAuthSubmit(event, "/api/auth/register"));
+      loginForm.addEventListener("submit", (event) => handleAuthSubmit(event, "/api/auth/login"));
+      transferForm.addEventListener("submit", handleTransfer);
+      logoutButton.addEventListener("click", logout);
+      refreshSessionButton.addEventListener("click", refreshSession);
+
+      function switchTab(tabName) {
+        document.querySelectorAll(".tab-button").forEach((button) => {
+          button.classList.toggle("active", button.dataset.tab === tabName);
+        });
+
+        registerForm.classList.toggle("hidden", tabName !== "register");
+        loginForm.classList.toggle("hidden", tabName !== "login");
+        setMessage("");
+      }
+
+      function setMessage(message, isError = false) {
+        messageBox.textContent = message;
+        messageBox.style.color = isError ? "#b42318" : "#0a6d55";
+      }
+
+      function setAuth(accessToken, user) {
+        state.accessToken = accessToken;
+        state.user = user;
+        localStorage.setItem("accessToken", accessToken);
+        tokenStatus.textContent = accessToken ? "Available" : "Missing";
+        statusBadge.textContent = accessToken ? "Signed in" : "Signed out";
+        logoutButton.classList.toggle("hidden", !accessToken);
+      }
+
+      function clearAuth() {
+        state.accessToken = "";
+        state.user = null;
+        state.accounts = [];
+        localStorage.removeItem("accessToken");
+        tokenStatus.textContent = "Missing";
+        statusBadge.textContent = "Signed out";
+        logoutButton.classList.add("hidden");
+        renderDashboard();
+      }
+
+      async function apiFetch(path, options = {}) {
+        const headers = {
+          "Content-Type": "application/json",
+          ...(options.headers || {})
+        };
+
+        if (state.accessToken) {
+          headers.Authorization = `Bearer ${state.accessToken}`;
+        }
+
+        const response = await fetch(path, {
+          ...options,
+          headers,
+          credentials: "include"
+        });
+
+        if (response.status === 401 && path !== "/api/auth/refresh") {
+          const refreshed = await refreshSession(true);
+
+          if (refreshed) {
+            return apiFetch(path, options);
+          }
+        }
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(data.message || "Request failed.");
+        }
+
+        return data;
+      }
+
+      async function handleAuthSubmit(event, endpoint) {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const payload = Object.fromEntries(formData.entries());
+
+        try {
+          const data = await apiFetch(endpoint, {
+            method: "POST",
+            body: JSON.stringify(payload)
+          });
+
+          setAuth(data.accessToken, data.user);
+          setMessage(data.message);
+          event.currentTarget.reset();
+          await loadAccounts();
+        } catch (error) {
+          setMessage(error.message, true);
+        }
+      }
+
+      async function loadAccounts() {
+        try {
+          const data = await apiFetch("/api/accounts/me");
+          state.user = data.user;
+          state.accounts = data.accounts;
+          renderDashboard();
+        } catch (error) {
+          setMessage(error.message, true);
+        }
+      }
+
+      function renderDashboard() {
+        userName.textContent = state.user?.name || "Guest User";
+        userEmail.textContent = state.user?.email || "Sign in to load account details.";
+
+        const balance = state.accounts.reduce((sum, account) => sum + account.balance, 0);
+        totalBalance.textContent = formatCurrency(balance);
+
+        accountsGrid.innerHTML = state.accounts
+          .map(
+            (account) => `
+              <article class="account-card">
+                <p class="eyebrow">${account.type} account</p>
+                <h4>${account.accountNumber}</h4>
+                <p>Currency: ${account.currency}</p>
+                <p class="amount">${formatCurrency(account.balance)}</p>
+              </article>
+            `
+          )
+          .join("");
+
+        const optionsMarkup = state.accounts
+          .map(
+            (account) =>
+              `<option value="${account._id}">${capitalize(account.type)} • ${account.accountNumber.slice(-4)}</option>`
+          )
+          .join("");
+
+        fromAccount.innerHTML = `<option value="">Select source</option>${optionsMarkup}`;
+        toAccount.innerHTML = `<option value="">Select destination</option>${optionsMarkup}`;
+      }
+
+      async function handleTransfer(event) {
+        event.preventDefault();
+
+        try {
+          const payload = {
+            fromAccountId: fromAccount.value,
+            toAccountId: toAccount.value,
+            amount: document.getElementById("transferAmount").value
+          };
+          const data = await apiFetch("/api/accounts/transfer", {
+            method: "POST",
+            body: JSON.stringify(payload)
+          });
+
+          state.accounts = data.accounts;
+          renderDashboard();
+          transferForm.reset();
+          setMessage(data.message);
+        } catch (error) {
+          setMessage(error.message, true);
+        }
+      }
+
+      async function refreshSession(silent = false) {
+        try {
+          const data = await apiFetch("/api/auth/refresh", { method: "POST" });
+          setAuth(data.accessToken, data.user);
+
+          if (!silent) {
+            setMessage(data.message);
+          }
+
+          await loadAccounts();
+          return true;
+        } catch (error) {
+          if (!silent) {
+            setMessage(error.message, true);
+          }
+
+          clearAuth();
+          return false;
+        }
+      }
+
+      async function logout() {
+        try {
+          await apiFetch("/api/auth/logout", { method: "POST" });
+          setMessage("Logged out successfully.");
+        } catch (error) {
+          setMessage(error.message, true);
+        } finally {
+          clearAuth();
+        }
+      }
+
+      function formatCurrency(value) {
+        return new Intl.NumberFormat("en-IN", {
+          style: "currency",
+          currency: "INR",
+          maximumFractionDigits: 2
+        }).format(value);
+      }
+
+      function capitalize(value) {
+        return value.charAt(0).toUpperCase() + value.slice(1);
+      }
+
+      if (state.accessToken) {
+        loadAccounts();
+      } else {
+        refreshSession(true);
+      }
+    </script>
   </body>
   </html>
