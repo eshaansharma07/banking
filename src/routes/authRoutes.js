@@ -11,6 +11,17 @@ const {
 
 const router = express.Router();
 
+function sendServerError(res, fallbackMessage, error) {
+  return res.status(500).json({
+    message: fallbackMessage,
+    details: {
+      message: error.message,
+      name: error.name,
+      code: error.code || null
+    }
+  });
+}
+
 function createAccountNumber() {
   return `${Date.now()}${Math.floor(1000 + Math.random() * 9000)}`;
 }
@@ -91,7 +102,7 @@ router.post("/register", async (req, res) => {
       }
     });
   } catch (error) {
-    return res.status(500).json({ message: "Failed to register user." });
+    return sendServerError(res, "Failed to register user.", error);
   }
 });
 
@@ -131,7 +142,7 @@ router.post("/login", async (req, res) => {
       }
     });
   } catch (error) {
-    return res.status(500).json({ message: "Failed to login." });
+    return sendServerError(res, "Failed to login.", error);
   }
 });
 

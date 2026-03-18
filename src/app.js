@@ -10,6 +10,14 @@ const accountRoutes = require("./routes/accountRoutes");
 const app = express();
 const publicDir = path.join(__dirname, "..");
 
+function errorDetails(error) {
+  return {
+    message: error.message,
+    name: error.name,
+    code: error.code || null
+  };
+}
+
 app.use(
   cors({
     origin(origin, callback) {
@@ -26,11 +34,26 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(publicDir));
 
-app.get("/api/health", (req, res) => {
-  res.json({
-    status: "ok",
-    service: "banking-api"
-  });
+app.get("/api/health", async (req, res) => {
+  try {
+    const connection = await connectToDatabase();
+
+    res.json({
+      status: "ok",
+      service: "banking-api",
+      database: {
+        readyState: connection.readyState,
+        name: connection.name
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      service: "banking-api",
+      message: "Database connection failed.",
+      details: errorDetails(error)
+    });
+  }
 });
 
 app.use(async (req, res, next) => {
@@ -38,7 +61,10 @@ app.use(async (req, res, next) => {
     await connectToDatabase();
     next();
   } catch (error) {
-    res.status(500).json({ message: "Database connection failed." });
+    res.status(500).json({
+      message: "Database connection failed.",
+      details: errorDetails(error)
+    });
   }
 });
 
