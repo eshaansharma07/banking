@@ -603,7 +603,8 @@
 
       async function handleAuthSubmit(event, endpoint) {
         event.preventDefault();
-        const formData = new FormData(event.currentTarget);
+        const form = event.currentTarget;
+        const formData = new FormData(form);
         const payload = Object.fromEntries(formData.entries());
 
         try {
@@ -614,7 +615,7 @@
 
           setAuth(data.accessToken, data.user);
           setMessage(data.message);
-          event.currentTarget.reset();
+          form.reset();
           await loadAccounts();
         } catch (error) {
           setMessage(error.message, true);
