@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
@@ -7,6 +8,7 @@ const authRoutes = require("./routes/authRoutes");
 const accountRoutes = require("./routes/accountRoutes");
 
 const app = express();
+const publicDir = path.join(__dirname, "..");
 
 app.use(
   cors({
@@ -22,6 +24,7 @@ app.use(
 );
 app.use(express.json());
 app.use(cookieParser());
+app.use(express.static(publicDir));
 
 app.get("/api/health", (req, res) => {
   res.json({
@@ -43,6 +46,10 @@ app.use("/api/auth", authRoutes);
 app.use("/api/accounts", accountRoutes);
 
 app.use((req, res) => {
+  if (!req.path.startsWith("/api")) {
+    return res.sendFile(path.join(publicDir, "index.html"));
+  }
+
   res.status(404).json({ message: "Route not found." });
 });
 
