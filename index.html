@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nova Bank | Secure JWT Banking Demo</title>
+    <meta
+      name="description"
+      content="A secure JWT-authenticated banking demo with MongoDB, refresh tokens, and protected account APIs."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <nav class="topbar">
+          <div class="brand">
+            <span class="brand-mark"></span>
+            <span>Nova Bank</span>
+          </div>
+          <button id="logoutButton" class="ghost-button hidden">Logout</button>
+        </nav>
+
+        <div class="hero-grid">
+          <section class="hero-copy card glass">
+            <p class="eyebrow">JWT Authentication for Banking API</p>
+            <h1>Secure accounts, fast refresh tokens, and a frontend that feels product-ready.</h1>
+            <p class="hero-text">
+              Register a user, sign in with JWT, refresh expired sessions seamlessly, and explore protected
+              banking routes backed by MongoDB.
+            </p>
+            <div class="hero-metrics">
+              <div>
+                <strong>bcrypt</strong>
+                <span>Hashed passwords</span>
+              </div>
+              <div>
+                <strong>JWT</strong>
+                <span>Access + refresh flow</span>
+              </div>
+              <div>
+                <strong>MongoDB</strong>
+                <span>Account-level security</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="hero-panel card">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Live Auth Console</p>
+                <h2>Access your demo bank</h2>
+              </div>
+              <span id="statusBadge" class="status-badge">Signed out</span>
+            </div>
+
+            <div class="tabs">
+              <button class="tab-button active" data-tab="register">Register</button>
+              <button class="tab-button" data-tab="login">Login</button>
+            </div>
+
+            <form id="registerForm" class="auth-form">
+              <label>
+                Full name
+                <input type="text" name="name" placeholder="Eshaan Sharma" required />
+              </label>
+              <label>
+                Email
+                <input type="email" name="email" placeholder="you@example.com" required />
+              </label>
+              <label>
+                Password
+                <input type="password" name="password" placeholder="Minimum 8 characters" required />
+              </label>
+              <button type="submit" class="primary-button">Create account</button>
+            </form>
+
+            <form id="loginForm" class="auth-form hidden">
+              <label>
+                Email
+                <input type="email" name="email" placeholder="you@example.com" required />
+              </label>
+              <label>
+                Password
+                <input type="password" name="password" placeholder="Your password" required />
+              </label>
+              <button type="submit" class="primary-button">Login securely</button>
+            </form>
+
+            <p id="messageBox" class="message-box"></p>
+          </section>
+        </div>
+      </header>
+
+      <main class="dashboard">
+        <section class="section-head">
+          <div>
+            <p class="eyebrow">Protected Banking Area</p>
+            <h2>Your secure dashboard</h2>
+          </div>
+          <button id="refreshSessionButton" class="ghost-button">Refresh session</button>
+        </section>
+
+        <section class="dashboard-grid">
+          <article class="card summary-card">
+            <p class="eyebrow">Authenticated user</p>
+            <h3 id="userName">Guest User</h3>
+            <p id="userEmail">Sign in to load account details.</p>
+            <div class="token-panel">
+              <span>Access token status</span>
+              <strong id="tokenStatus">Missing</strong>
+            </div>
+          </article>
+
+          <article class="card balance-card">
+            <p class="eyebrow">Portfolio balance</p>
+            <h3 id="totalBalance">INR 0</h3>
+            <p>Protected data fetched only with a valid bearer token.</p>
+          </article>
+        </section>
+
+        <section id="accountsGrid" class="accounts-grid"></section>
+
+        <section class="transfer-layout">
+          <article class="card transfer-card">
+            <p class="eyebrow">Internal transfer</p>
+            <h3>Move funds between your accounts</h3>
+            <form id="transferForm" class="transfer-form">
+              <label>
+                From
+                <select id="fromAccount" required></select>
+              </label>
+              <label>
+                To
+                <select id="toAccount" required></select>
+              </label>
+              <label>
+                Amount
+                <input id="transferAmount" type="number" min="1" step="0.01" placeholder="5000" required />
+              </label>
+              <button type="submit" class="primary-button">Transfer now</button>
+            </form>
+          </article>
+
+          <article class="card api-card">
+            <p class="eyebrow">API surface</p>
+            <h3>Implemented endpoints</h3>
+            <ul>
+              <li><code>POST /api/auth/register</code></li>
+              <li><code>POST /api/auth/login</code></li>
+              <li><code>POST /api/auth/refresh</code></li>
+              <li><code>POST /api/auth/logout</code></li>
+              <li><code>GET /api/accounts/me</code></li>
+              <li><code>GET /api/accounts/:accountId</code></li>
+              <li><code>POST /api/accounts/transfer</code></li>
+            </ul>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script src="/app.js"></script>
+  </body>
+  </html>

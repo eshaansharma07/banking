@@ -1,0 +1,49 @@
+const express = require("express");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const connectToDatabase = require("./config/db");
+const env = require("./config/env");
+const authRoutes = require("./routes/authRoutes");
+const accountRoutes = require("./routes/accountRoutes");
+
+const app = express();
+
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin || origin === env.appOrigin) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("CORS blocked for this origin."));
+    },
+    credentials: true
+  })
+);
+app.use(express.json());
+app.use(cookieParser());
+
+app.get("/api/health", (req, res) => {
+  res.json({
+    status: "ok",
+    service: "banking-api"
+  });
+});
+
+app.use(async (req, res, next) => {
+  try {
+    await connectToDatabase();
+    next();
+  } catch (error) {
+    res.status(500).json({ message: "Database connection failed." });
+  }
+});
+
+app.use("/api/auth", authRoutes);
+app.use("/api/accounts", accountRoutes);
+
+app.use((req, res) => {
+  res.status(404).json({ message: "Route not found." });
+});
+
+module.exports = app;
